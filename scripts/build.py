@@ -1,1 +1,58 @@
-print("Poem generator is working!")
+from pathlib import Path
+import html
+
+POEMS_DIR = Path("poems")
+
+def parse_poem(path):
+    text = path.read_text(encoding="utf-8").strip()
+
+    parts = text.split("\n", 1)
+
+    title = parts[0].strip()
+    poem = parts[1].strip() if len(parts) > 1 else ""
+
+    return title, poem
+
+
+def make_poem_page(title, poem):
+    # Escape HTML characters so the poem is displayed as text
+    title_html = html.escape(title)
+
+    # Preserve line breaks and blank lines
+    poem_html = html.escape(poem)
+    poem_html = poem_html.replace("\n\n", "</p><p>")
+    poem_html = poem_html.replace("\n", "<br>\n")
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title_html}</title>
+</head>
+<body>
+    <main>
+        <a href="../index.html">← Back to poems</a>
+
+        <h1>{title_html}</h1>
+
+        <div class="poem">
+            <p>{poem_html}</p>
+        </div>
+    </main>
+</body>
+</html>
+"""
+
+
+for poem_file in POEMS_DIR.glob("*.txt"):
+    title, poem = parse_poem(poem_file)
+
+    output_file = POEMS_DIR / f"{poem_file.stem}.html"
+
+    output_file.write_text(
+        make_poem_page(title, poem),
+        encoding="utf-8"
+    )
+
+    print(f"Generated {output_file}")
