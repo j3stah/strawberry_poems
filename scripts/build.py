@@ -3,6 +3,7 @@ import html
 
 POEMS_DIR = Path("poems")
 
+
 def parse_poem(path):
     text = path.read_text(encoding="utf-8").strip()
 
@@ -15,10 +16,8 @@ def parse_poem(path):
 
 
 def make_poem_page(title, poem):
-    # Escape HTML characters so the poem is displayed as text
     title_html = html.escape(title)
 
-    # Preserve line breaks and blank lines
     poem_html = html.escape(poem)
     poem_html = poem_html.replace("\n\n", "</p><p>")
     poem_html = poem_html.replace("\n", "<br>\n")
@@ -45,6 +44,38 @@ def make_poem_page(title, poem):
 """
 
 
+def make_poems_index(poems):
+    links = []
+
+    for title, path in poems:
+        links.append(
+            f'        <li><a href="poems/{path.stem}.html">{html.escape(title)}</a></li>'
+        )
+
+    poem_list = "\n".join(links)
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Poems</title>
+</head>
+<body>
+    <main>
+        <h1>My Poems</h1>
+
+        <ul>
+{poem_list}
+        </ul>
+    </main>
+</body>
+</html>
+"""
+
+
+poems = []
+
 for poem_file in POEMS_DIR.glob("*.txt"):
     title, poem = parse_poem(poem_file)
 
@@ -55,4 +86,17 @@ for poem_file in POEMS_DIR.glob("*.txt"):
         encoding="utf-8"
     )
 
+    poems.append((title, poem_file))
+
     print(f"Generated {output_file}")
+
+
+# Sort poems alphabetically by title
+poems.sort(key=lambda poem: poem[0].lower())
+
+Path("index.html").write_text(
+    make_poems_index(poems),
+    encoding="utf-8"
+)
+
+print("Generated index.html")
