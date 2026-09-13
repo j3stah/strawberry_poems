@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import datetime
 import html
 
 POEMS_DIR = Path("poems")
@@ -7,20 +8,42 @@ POEMS_DIR = Path("poems")
 def parse_poem(path):
     text = path.read_text(encoding="utf-8").strip()
 
-    parts = text.split("\n", 1)
+    lines = text.splitlines()
 
-    title = parts[0].strip()
-    poem = parts[1].strip() if len(parts) > 1 else ""
+    title = lines[0].strip()
 
-    return title, poem
+    date = ""
+    poem_start = 1
+
+    if len(lines) > 1 and lines[1].strip():
+        date = lines[1].strip()
+        poem_start = 2
+
+    # Skip blank lines between metadata and poem
+    while poem_start < len(lines) and not lines[poem_start].strip():
+        poem_start += 1
+
+    poem = "\n".join(lines[poem_start:]).strip()
+
+    return title, date, poem
 
 
-def make_poem_page(title, poem):
+def parse_date(date):
+    try:
+        return datetime.strptime(date, "%B %d, %Y")
+    except ValueError:
+        return datetime.min
+
+
+def make_poem_page(title, date, poem):
     title_html = html.escape(title)
+    date_html = html.escape(date)
 
     poem_html = html.escape(poem)
     poem_html = poem_html.replace("\n\n", "</p><p>")
     poem_html = poem_html.replace("\n", "<br>\n")
+
+    date_section = f"<p><em>{date_html}</em></p>" if date else ""
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -35,6 +58,8 @@ def make_poem_page(title, poem):
 
         <h1>{title_html}</h1>
 
+        {date_section}
+
         <div class="poem">
             <p>{poem_html}</p>
         </div>
@@ -47,9 +72,14 @@ def make_poem_page(title, poem):
 def make_poems_index(poems):
     links = []
 
-    for title, path in poems:
+    for title, date, path in poems:
+        title_html = html.escape(title)
+        date_html = html.escape(date)
+
+        date_section = f" <em>{date_html}</em>" if date else ""
+
         links.append(
-            f'        <li><a href="poems/{path.stem}.html">{html.escape(title)}</a></li>'
+            f'        <li><a href="poems/{path.stem}.html">{title_html}</a>{date_section}</li>'
         )
 
     poem_list = "\n".join(links)
@@ -77,22 +107,22 @@ def make_poems_index(poems):
 poems = []
 
 for poem_file in POEMS_DIR.glob("*.txt"):
-    title, poem = parse_poem(poem_file)
+    title, date, poem = parse_poem(poem_file)
 
     output_file = POEMS_DIR / f"{poem_file.stem}.html"
 
     output_file.write_text(
-        make_poem_page(title, poem),
+        make_poem_page(title, date, poem),
         encoding="utf-8"
     )
 
-    poems.append((title, poem_file))
+    poems.append((title, date, poem_file))
 
     print(f"Generated {output_file}")
 
 
-# Sort poems alphabetically by title
-poems.sort(key=lambda poem: poem[0].lower())
+# Newest poems first
+poems.sort(key=lambda poem: parse_date(poem[1]), reverse=True)
 
 Path("index.html").write_text(
     make_poems_index(poems),
