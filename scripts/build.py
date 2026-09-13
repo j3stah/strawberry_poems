@@ -51,11 +51,11 @@ def make_poem_page(title, date, poem):
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{title_html}</title>
+    <title>{title_html} — H.S.</title>
 </head>
 <body>
     <main>
-        <a href="../index.html">← Back to poems</a>
+        <a href="../index.html">← All Poems</a>
 
         <h1>{title_html}</h1>
 
@@ -77,10 +77,13 @@ def make_poems_index(poems):
         title_html = html.escape(title)
         date_html = html.escape(date)
 
-        date_section = f" <em>{date_html}</em>" if date else ""
+        date_section = f"<em>{date_html}</em>" if date else ""
 
         links.append(
-            f'        <li><a href="poems/{path.stem}.html">{title_html}</a>{date_section}</li>'
+            f"""        <li>
+            <a href="poems/{path.stem}.html">{title_html}</a>
+            {date_section}
+        </li>"""
         )
 
     poem_list = "\n".join(links)
@@ -91,15 +94,22 @@ def make_poems_index(poems):
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Poems</title>
+    <title>H.S. — Poetry & Writing</title>
 </head>
 <body>
     <main>
-        <h1>My Poems</h1>
+        <header class="site-header">
+            <h1>H.S.</h1>
+            <p>Poetry &amp; Writing</p>
+        </header>
 
-        <ul>
+        <section>
+            <h2>Poems</h2>
+
+            <ul>
 {poem_list}
-        </ul>
+            </ul>
+        </section>
     </main>
 </body>
 </html>
