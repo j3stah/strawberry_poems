@@ -7,7 +7,6 @@ POEMS_DIR = Path("poems")
 
 def parse_poem(path):
     text = path.read_text(encoding="utf-8").strip()
-
     lines = text.splitlines()
 
     title = lines[0].strip()
@@ -19,7 +18,6 @@ def parse_poem(path):
         date = lines[1].strip()
         poem_start = 2
 
-    # Skip blank lines between metadata and poem
     while poem_start < len(lines) and not lines[poem_start].strip():
         poem_start += 1
 
@@ -39,31 +37,56 @@ def make_poem_page(title, date, poem):
     title_html = html.escape(title)
     date_html = html.escape(date)
 
+    # Preserve line breaks and blank lines in the poem
     poem_html = html.escape(poem)
-    poem_html = poem_html.replace("\n\n", "</p><p>")
-    poem_html = poem_html.replace("\n", "<br>\n")
+    paragraphs = poem_html.split("\n\n")
 
-    date_section = f"<p><em>{date_html}</em></p>" if date else ""
+    poem_paragraphs = []
+
+    for paragraph in paragraphs:
+        paragraph = paragraph.replace("\n", "<br>\n")
+        poem_paragraphs.append(f"                <p>{paragraph}</p>")
+
+    poem_content = "\n".join(poem_paragraphs)
+
+    date_section = (
+        f'            <div class="poem-date">{date_html}</div>'
+        if date
+        else ""
+    )
 
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
     <title>{title_html} — H.S.</title>
 </head>
+
 <body>
-    <main>
-        <a href="../index.html">← All Poems</a>
+    <main class="poem-page">
 
-        <h1>{title_html}</h1>
+        <nav class="top-nav">
+            <a href="../index.html">← All Poems</a>
+        </nav>
 
-        {date_section}
+        <header class="poem-header">
+            <div class="small-mark">H.S.</div>
 
-        <div class="poem">
-            <p>{poem_html}</p>
-        </div>
+            <h1>{title_html}</h1>
+
+            {date_section}
+        </header>
+
+        <article class="poem">
+{poem_content}
+        </article>
+
+        <footer>
+            <a href="../index.html">Return to the collection</a>
+        </footer>
+
     </main>
 </body>
 </html>
@@ -71,45 +94,65 @@ def make_poem_page(title, date, poem):
 
 
 def make_poems_index(poems):
-    links = []
+    entries = []
 
     for title, date, path in poems:
         title_html = html.escape(title)
         date_html = html.escape(date)
 
-        date_section = f"<em>{date_html}</em>" if date else ""
-
-        links.append(
-            f"""        <li>
-            <a href="poems/{path.stem}.html">{title_html}</a>
-            {date_section}
-        </li>"""
+        date_section = (
+            f'                <div class="poem-date">{date_html}</div>'
+            if date
+            else ""
         )
 
-    poem_list = "\n".join(links)
+        entries.append(
+            f"""            <li>
+                <a class="poem-link" href="poems/{path.stem}.html">
+                    <span class="poem-title">{title_html}</span>
+                    {date_section}
+                </a>
+            </li>"""
+        )
+
+    poem_list = "\n".join(entries)
 
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>H.S. — Poetry & Writing</title>
+    <link rel="stylesheet" href="style.css">
+    <title>H.S. — Poetry</title>
 </head>
+
 <body>
-    <main>
+    <main class="home-page">
+
         <header class="site-header">
-            <h1>H.S.</h1>
-            <p>Poetry &amp; Writing</p>
+            <div class="ornament">✦</div>
+
+            <div class="initials">H.S.</div>
+
+            <div class="subtitle">Poetry &amp; Writing</div>
+
+            <div class="header-rule"></div>
         </header>
 
-        <section>
-            <h2>Poems</h2>
+        <section class="collection">
+            <div class="section-label">The Collection</div>
+
+            <h1>Poems</h1>
 
             <ul>
 {poem_list}
             </ul>
         </section>
+
+        <footer>
+            <div class="footer-mark">H.S.</div>
+        </footer>
+
     </main>
 </body>
 </html>
