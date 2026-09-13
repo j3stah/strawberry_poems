@@ -1,12 +1,16 @@
 :root {
-    --paper: #f9f6ee;
-    --ink: #302c28;
-    --muted: #776f65;
-    --accent: #604b3d;
+    --paper: #f7f3ea;
+    --ink: #292622;
+    --muted: #766e64;
+    --accent: #634b3b;
 }
 
 * {
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -14,155 +18,239 @@ body {
     background: var(--paper);
     color: var(--ink);
     font-family: Georgia, "Times New Roman", serif;
+    font-size: 16px;
     line-height: 1.7;
 }
 
 main {
-    max-width: 680px;
+    width: min(100% - 48px, 720px);
     margin: 0 auto;
-    padding: 80px 30px;
 }
 
-/* Site header */
+/* --------------------------------
+   HOMEPAGE
+   -------------------------------- */
+
+.home-page {
+    padding: 72px 0 55px;
+}
 
 .site-header {
     text-align: center;
-    margin-bottom: 65px;
+    margin-bottom: 95px;
 }
 
-.site-header::before {
-    content: "────── ✦ ──────";
-    display: block;
-    color: var(--muted);
-    font-size: 0.85rem;
+.ornament {
+    color: var(--accent);
+    font-size: 0.8rem;
     margin-bottom: 28px;
 }
 
-.site-header h1 {
-    margin: 0;
-    font-size: 2.8rem;
-    font-weight: normal;
-    letter-spacing: 0.08em;
-}
-
-.site-header p {
-    margin: 8px 0 0;
-    color: var(--muted);
-    font-size: 0.85rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-}
-
-.site-header::after {
-    content: "────────────────";
-    display: block;
-    color: var(--muted);
-    font-size: 0.8rem;
-    margin-top: 28px;
-}
-
-/* Section headings */
-
-h2 {
-    text-align: center;
-    margin: 0 0 30px;
-    font-size: 1.15rem;
+.initials {
+    font-size: 3.6rem;
     font-weight: normal;
     letter-spacing: 0.18em;
+    line-height: 1;
+    margin-left: 0.18em;
+}
+
+.subtitle {
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
 }
 
-/* Poem list */
+.header-rule {
+    width: 110px;
+    height: 1px;
+    margin: 34px auto 0;
+    background: var(--muted);
+    opacity: 0.45;
+}
 
-ul {
+.collection {
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.section-label {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+}
+
+.collection h1 {
+    margin: 12px 0 48px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: normal;
+    letter-spacing: 0.06em;
+}
+
+.collection ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-li {
-    padding: 18px 0;
+.collection li {
     text-align: center;
+    margin-bottom: 34px;
 }
 
-li a {
+.poem-link {
     display: block;
     color: var(--ink);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.poem-link:hover {
+    color: var(--accent);
+}
+
+.poem-title {
+    display: block;
     font-size: 1.15rem;
 }
 
-li a:hover {
-    color: var(--accent);
+.poem-date {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-style: italic;
+}
+
+.home-page footer {
+    margin-top: 105px;
+    text-align: center;
+}
+
+.footer-mark {
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+}
+
+
+/* --------------------------------
+   POEM PAGE
+   -------------------------------- */
+
+.poem-page {
+    padding: 45px 0 70px;
+}
+
+.top-nav {
+    margin-bottom: 100px;
+}
+
+.top-nav a {
+    color: var(--muted);
+    font-size: 0.8rem;
     text-decoration: none;
 }
 
-li em {
-    display: block;
-    margin-top: 2px;
-    color: var(--muted);
-    font-size: 0.85rem;
-}
-
-/* Links */
-
-a {
-    color: var(--accent);
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* Individual poem pages */
-
-main > a {
-    display: inline-block;
-    margin-bottom: 55px;
-    color: var(--muted);
-    font-size: 0.85rem;
-}
-
-main > a:hover {
+.top-nav a:hover {
     color: var(--accent);
 }
 
-main > h1 {
+.poem-header {
+    text-align: center;
+    margin-bottom: 75px;
+}
+
+.small-mark {
+    color: var(--muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    margin-bottom: 28px;
+}
+
+.poem-header h1 {
     margin: 0;
-    text-align: center;
-    font-size: 2.4rem;
+    font-size: 2.5rem;
     font-weight: normal;
-    letter-spacing: 0.05em;
+    line-height: 1.25;
+    letter-spacing: 0.03em;
 }
 
-main > p {
-    text-align: center;
-    margin-top: 8px;
-    color: var(--muted);
-    font-size: 0.9rem;
+.poem-header .poem-date {
+    margin-top: 12px;
 }
 
 .poem {
-    margin-top: 55px;
-    font-size: 1.08rem;
+    max-width: 570px;
+    margin: 0 auto;
+    font-size: 1.05rem;
 }
 
 .poem p {
-    margin: 0;
+    margin: 0 0 2.1em;
 }
 
-/* Small screens */
+.poem p:last-child {
+    margin-bottom: 0;
+}
+
+.poem-page footer {
+    margin-top: 100px;
+    text-align: center;
+}
+
+.poem-page footer a {
+    color: var(--muted);
+    font-size: 0.78rem;
+    text-decoration: none;
+}
+
+.poem-page footer a:hover {
+    color: var(--accent);
+}
+
+
+/* --------------------------------
+   MOBILE
+   -------------------------------- */
 
 @media (max-width: 600px) {
     main {
-        padding: 55px 24px;
+        width: min(100% - 36px, 720px);
     }
 
-    .site-header h1 {
-        font-size: 2.3rem;
+    .home-page {
+        padding-top: 55px;
     }
 
-    main > h1 {
+    .site-header {
+        margin-bottom: 70px;
+    }
+
+    .initials {
+        font-size: 3rem;
+    }
+
+    .collection h1 {
+        font-size: 1.75rem;
+    }
+
+    .poem-page {
+        padding-top: 30px;
+    }
+
+    .top-nav {
+        margin-bottom: 75px;
+    }
+
+    .poem-header h1 {
         font-size: 2rem;
+    }
+
+    .poem {
+        font-size: 1rem;
     }
 }
