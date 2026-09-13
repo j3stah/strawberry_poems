@@ -1,0 +1,77 @@
+:root {
+    --paper: #f6f1e8;
+    --ink: #2c2926;
+    --muted: #756e64;
+    --line: #cfc5b5;
+    --accent: #6b4f3a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.7;
+}
+
+main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 70px 30px;
+}
+
+h1 {
+    margin-bottom: 8px;
+    font-size: 2.6rem;
+    font-weight: normal;
+    letter-spacing: 0.04em;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 40px;
+}
+
+li {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 1.15rem;
+}
+
+li em {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-left: 8px;
+}
+
+.poem {
+    margin-top: 45px;
+    font-size: 1.1rem;
+}
+
+.poem p {
+    margin-bottom: 1.8em;
+}
+
+main > p em {
+    color: var(--muted);
+}
+
+main > a {
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+}
